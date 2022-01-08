@@ -1,3 +1,22 @@
+-- WHEN I choose to view all departments
+-- THEN I am presented with a formatted table showing department names and department ids
+SELECT
+   department.id AS ID,
+   department.name AS "Department Name"
+FROM
+   department;
+
+-- WHEN I choose to view all roles
+-- THEN I am presented with the job title, role id, the department that role belongs to, and the salary for that role
+SELECT
+   role.id AS ID,
+   role.title AS "Role Title",
+   role.salary AS Salary,
+   department.name AS Department
+FROM
+   role
+   LEFT JOIN department ON role.department_id = department.id;
+
 -- WHEN I choose to view all employees
 -- THEN I am presented with a formatted table showing employee data, including:
 -- employee ids, first names, last names, job titles, departments, salaries, and managers 
@@ -8,6 +27,7 @@ SELECT
    role.title AS Role,
    department.name AS Department,
    role.salary AS Salary,
+   -- replace with string if null
    coalesce(b.first_name, '-') AS Manager
 FROM
    employee a

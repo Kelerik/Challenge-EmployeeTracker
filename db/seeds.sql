@@ -29,12 +29,12 @@ INSERT INTO
    )
 VALUES
    ("Sydney", "Frost", 1, NULL),
-   ("Gideon", "Fitzpatrick", 2, 1),
    ("Tobias", "Blackwell", 3, NULL),
-   ("Saskia", "Bowes", 4, 3),
-   ("Krista", "Woolley", 5, 3),
    ("Gabija", "Burrows", 6, NULL),
-   ("Anderson", "Greenwood", 7, 6),
-   ("Amy", "Daly", 8, 6),
    ("Merryn", "Hastings", 9, NULL),
-   ("Kirk", "Petty", 10, 9);
+   ("Gideon", "Fitzpatrick", 2, 1),
+   ("Saskia", "Bowes", 4, 2),
+   ("Krista", "Woolley", 5, 2),
+   ("Anderson", "Greenwood", 7, 3),
+   ("Amy", "Daly", 8, 3),
+   ("Kirk", "Petty", 10, 4);

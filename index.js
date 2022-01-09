@@ -63,6 +63,7 @@ const promptMenu = () => {
                addDepartment();
                break;
             case "Add a role":
+               addRole();
                break;
             case "Add an employee":
                break;
@@ -151,7 +152,7 @@ const addDepartment = () => {
    inquirer
       .prompt({
          type: "input",
-         name: "departmentName",
+         name: "name",
          message: "Enter a name for the department",
          validate: (promptInput) => validateInput(promptInput),
       })
@@ -161,12 +162,50 @@ const addDepartment = () => {
             department(name)
          VALUES
             (?)`;
-         db.query(sql, answer.departmentName, (err) => {
+         db.query(sql, answer.name, (err) => {
             if (err) {
                updateBottomBar("Error! " + err.message);
             }
          });
          viewDepartments();
+      });
+};
+
+// add role
+const addRole = () => {
+   inquirer
+      .prompt([
+         {
+            type: "input",
+            name: "name",
+            message: "Enter a name for the role",
+            validate: (promptInput) => validateInput(promptInput),
+         },
+         {
+            type: "number",
+            name: "salary",
+            message: "Enter a salary for the role",
+            validate: (promptInput) => validateInput(promptInput),
+         },
+         {
+            type: "number",
+            name: "department",
+            message: "Enter the department ID that this role belongs to",
+            validate: (promptInput) => validateInput(promptInput),
+         },
+      ])
+      .then((answers) => {
+         const sql = `
+         INSERT INTO
+            role(title, salary, department_id)
+         VALUES
+            (?, ?, ?)`;
+         db.query(sql, Object.values(answers), (err) => {
+            if (err) {
+               updateBottomBar("Error! " + err.message);
+            }
+         });
+         viewRoles();
       });
 };
 

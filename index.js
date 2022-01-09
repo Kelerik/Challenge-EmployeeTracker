@@ -27,7 +27,7 @@ const validateInput = (string) => {
       return false;
    }
 };
-// validate input from prompts
+// validate number input from prompts
 const validateNumber = (input) => {
    if (!isNaN(input)) {
       return true;
@@ -139,7 +139,6 @@ const viewEmployees = () => {
       role.title AS Role,
       department.name AS Department,
       role.salary AS Salary,
-      -- replace with string if null
       coalesce(b.first_name, '-') AS Manager
    FROM
       employee a
@@ -304,7 +303,7 @@ const updateEmployeeRole = () => {
                choices: employeeList,
             })
             .then((answer) => {
-               // get id from answer
+               // get employee id from answer
                const employeeId = answer.name.split(" ")[0];
                // prompt for new role id
                inquirer
@@ -315,6 +314,7 @@ const updateEmployeeRole = () => {
                      validate: (promptInput) => validateNumber(promptInput),
                   })
                   .then((answer) => {
+                     // update new role id
                      const newId = answer.role;
                      const qUpdate = `
                      UPDATE
@@ -326,7 +326,6 @@ const updateEmployeeRole = () => {
                         if (err) {
                            updateBottomBar("Error! " + err.message);
                         }
-                        console.log("success");
                      });
                      viewEmployees();
                   });

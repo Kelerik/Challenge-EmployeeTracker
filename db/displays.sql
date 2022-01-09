@@ -4,7 +4,9 @@ SELECT
    department.id AS ID,
    department.name AS "Department Name"
 FROM
-   department;
+   department
+ORDER BY
+   id;
 
 -- WHEN I choose to view all roles
 -- THEN I am presented with the job title, role id, the department that role belongs to, and the salary for that role
@@ -15,7 +17,9 @@ SELECT
    department.name AS Department
 FROM
    role
-   LEFT JOIN department ON role.department_id = department.id;
+   LEFT JOIN department ON role.department_id = department.id
+ORDER BY
+   id;
 
 -- WHEN I choose to view all employees
 -- THEN I am presented with a formatted table showing employee data, including:
@@ -33,4 +37,6 @@ FROM
    employee a
    LEFT JOIN employee b ON a.manager_id = b.id
    LEFT JOIN role ON a.role_id = role.id
-   LEFT JOIN department ON role.department_id = department.id;
+   LEFT JOIN department ON role.department_id = department.id
+ORDER BY
+   id;

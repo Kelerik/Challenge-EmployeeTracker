@@ -6,7 +6,8 @@ DROP TABLE IF EXISTS department;
 
 CREATE TABLE department (
    id integer AUTO_INCREMENT PRIMARY KEY,
-   name varchar(30) NOT NULL
+   name varchar(30) NOT NULL,
+   UNIQUE (name)
 );
 
 CREATE TABLE role (

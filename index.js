@@ -78,6 +78,7 @@ const promptMenu = () => {
                addEmployee();
                break;
             case "Update an employee role":
+               updateEmployeeRole();
                break;
             case "Exit":
                db.end();
@@ -277,6 +278,61 @@ const addEmployee = () => {
          });
          viewEmployees();
       });
+};
+
+// update employee role
+const updateEmployeeRole = () => {
+   // query db to get all employee names
+   const qEmployees = `SELECT id, first_name, last_name FROM employee`;
+   db.query(qEmployees, (err, rows) => {
+      if (err) {
+         updateBottomBar("Error! " + err.message);
+      } else {
+         // create array of employees' id and full names
+         const employeeList = rows.map((item) => {
+            // { id: 1, first_name: 'Sydney', last_name: 'Frost' }
+            // converts to
+            // '1 Sydney Frost'
+            return Object.values(item).join(" ");
+         });
+         // prompt for employee selection
+         inquirer
+            .prompt({
+               type: "list",
+               name: "name",
+               message: "Select an employee to update",
+               choices: employeeList,
+            })
+            .then((answer) => {
+               // get id from answer
+               const employeeId = answer.name.split(" ")[0];
+               // prompt for new role id
+               inquirer
+                  .prompt({
+                     type: "input",
+                     name: "role",
+                     message: "Enter the employee's new role ID",
+                     validate: (promptInput) => validateNumber(promptInput),
+                  })
+                  .then((answer) => {
+                     const newId = answer.role;
+                     const qUpdate = `
+                     UPDATE
+                        employee
+                     SET
+                        role_id = ?
+                     WHERE id = ?`;
+                     db.query(qUpdate, [newId, employeeId], (err) => {
+                        if (err) {
+                           updateBottomBar("Error! " + err.message);
+                        }
+                        console.log("success");
+                     });
+                     viewEmployees();
+                  });
+            });
+      }
+   });
 };
 
 // execute

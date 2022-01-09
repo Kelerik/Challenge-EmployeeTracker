@@ -27,6 +27,15 @@ const validateInput = (string) => {
       return false;
    }
 };
+// validate input from prompts
+const validateNumber = (input) => {
+   if (!isNaN(input)) {
+      return true;
+   } else {
+      console.log("Answer must be a number!");
+      return false;
+   }
+};
 
 // main menu prompt
 const promptMenu = () => {
@@ -66,6 +75,7 @@ const promptMenu = () => {
                addRole();
                break;
             case "Add an employee":
+               addEmployee();
                break;
             case "Update an employee role":
                break;
@@ -182,16 +192,16 @@ const addRole = () => {
             validate: (promptInput) => validateInput(promptInput),
          },
          {
-            type: "number",
+            type: "input",
             name: "salary",
             message: "Enter a salary for the role",
-            validate: (promptInput) => validateInput(promptInput),
+            validate: (promptInput) => validateNumber(promptInput),
          },
          {
-            type: "number",
+            type: "input",
             name: "department",
             message: "Enter the department ID that this role belongs to",
-            validate: (promptInput) => validateInput(promptInput),
+            validate: (promptInput) => validateNumber(promptInput),
          },
       ])
       .then((answers) => {
@@ -206,6 +216,66 @@ const addRole = () => {
             }
          });
          viewRoles();
+      });
+};
+
+// add employee
+const addEmployee = () => {
+   inquirer
+      .prompt([
+         {
+            type: "input",
+            name: "firstName",
+            message: "Enter the employee's first name",
+            validate: (promptInput) => validateInput(promptInput),
+         },
+         {
+            type: "input",
+            name: "lastName",
+            message: "Enter the employee's last name",
+            validate: (promptInput) => validateInput(promptInput),
+         },
+         {
+            type: "input",
+            name: "role",
+            message: "Enter the role ID of the employee",
+            validate: (promptInput) => validateNumber(promptInput),
+         },
+         {
+            type: "input",
+            name: "manager",
+            message: "Enter the the employee's manager ID (optional)",
+            validate: (promptInput) => {
+               // only validate number if answer is provided
+               if (promptInput) {
+                  return validateNumber(promptInput);
+               } else {
+                  return true;
+               }
+            },
+         },
+      ])
+      .then((answers) => {
+         // if no answer to manager question, change empty string to null
+         if (!answers.manager) {
+            answers.manager = null;
+         }
+         const sql = `
+         INSERT INTO
+            employee(
+               first_name,
+               last_name,
+               role_id,
+               manager_id
+            )
+         VALUES
+            (?, ?, ?, ?)`;
+         db.query(sql, Object.values(answers), (err) => {
+            if (err) {
+               updateBottomBar("Error! " + err.message);
+            }
+         });
+         viewEmployees();
       });
 };
 
